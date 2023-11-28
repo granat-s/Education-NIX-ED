@@ -1,0 +1,23 @@
+CREATE TABLE potential_customers (
+id INT NOT NULL PRIMARY KEY,
+email VARCHAR(255),
+name VARCHAR(255),
+surname VARCHAR(255),
+second_name VARCHAR(255),
+city VARCHAR(255)
+);
+
+COPY potential_customers(id, email, name, surname, second_name, city)
+FROM '/tmp/sql_input_files/potential_customers.csv'
+DELIMITER ','
+CSV HEADER
+;
+
+SELECT first_name, email 
+FROM users
+WHERE city = 'City 17'
+UNION ALL
+SELECT name, email
+FROM potential_customers
+WHERE city = 'City 17'
+;

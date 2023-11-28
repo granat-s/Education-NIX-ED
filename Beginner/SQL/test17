@@ -1,0 +1,11 @@
+1.
+
+SELECT AVG(total) FROM orders
+WHERE order_status_order_status_id = 4;
+
+2.
+
+SELECT MAX(total)
+FROM orders
+WHERE extract(quarter from created_at) = 3 AND created_at > '2020-01-01'
+;

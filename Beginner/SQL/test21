@@ -1,0 +1,131 @@
+1. Вывести продукты, которые ни разу не попадали в корзину.
+
+SELECT Products.product_title
+FROM Products
+WHERE Products.product_id 
+NOT IN 
+(
+	SELECT Cart_product.products_product_id 
+	FROM Cart_product
+)
+;
+
+2. Вывести все продукты, которые так и не попали ни в 1 заказ. (но в корзину попасть могли).
+
+SELECT Products.product_title
+FROM Products
+WHERE Products.product_id 
+IN 
+(
+    SELECT Cart_product.products_product_id 
+    FROM Cart_product
+    JOIN Carts ON Cart_product.carts_cart_id = Carts.cart_id
+    WHERE Carts.cart_id 
+    NOT IN
+    (
+        SELECT Orders.carts_cart_id
+        FROM Orders
+    )
+);
+
+
+3. Вывести топ 10 продуктов, которые добавляли в корзины чаще всего.
+
+Slower solution
+
+SELECT Products.product_title
+FROM Products
+WHERE Products.product_id
+IN
+(
+	SELECT Id
+	FROM
+	(
+		SELECT COUNT(Cart_product.carts_cart_id) AS Number_of_carts, Cart_product.products_product_id AS Id
+		FROM Cart_product
+		GROUP BY Cart_product.products_product_id
+		ORDER BY Number_of_carts DESC
+		LIMIT 10
+	)
+)
+;
+--------------------------------------------
+Faster solution
+
+SELECT COUNT(Cart_product.carts_cart_id) as Number_of_carts, Products.product_title, Cart_product.products_product_id
+FROM Cart_product
+JOIN Products ON Cart_product.products_product_id = Products.product_id
+GROUP BY Cart_product.products_product_id, Products.product_title
+ORDER BY Number_of_carts DESC
+LIMIT 10
+;
+
+
+
+4. Вывести топ 10 продуктов, которые не только добавляли в корзины, но и оформляли заказы чаще всего.
+
+SELECT Products.product_title
+FROM Products
+WHERE Products.product_id
+IN
+(
+	SELECT Id
+	FROM
+	(
+		SELECT COUNT(Cart_product.carts_cart_id) AS Number_of_carts, Cart_product.products_product_id AS Id
+		FROM Cart_product
+		WHERE Cart_product.carts_cart_id IN
+		(
+			SELECT Cart_ID
+			FROM
+			(
+				SELECT Carts.cart_id AS Cart_ID, Orders.order_id AS Order_ID
+				FROM Orders
+				JOIN Carts ON Carts.cart_id = Orders.carts_cart_id 
+			)
+			
+		)
+		GROUP BY Cart_product.products_product_id
+		ORDER BY Number_of_carts DESC
+		LIMIT 10
+	)
+)
+;
+
+
+5. Вывести топ 5 юзеров, которые потратили больше всего денег (total в заказе).
+
+SELECT Users.first_name, Users.last_name
+FROM Users
+JOIN Carts ON Users.user_id = Carts.Users_user_id
+JOIN Orders ON Carts.cart_id = Orders.carts_cart_id
+WHERE Orders.order_status_order_status_id IN (3, 4)
+GROUP BY Users.user_id, Users.first_name, Users.last_name
+ORDER BY SUM(Carts.total) DESC
+LIMIT 5
+;
+
+
+6. Вывести топ 5 юзеров, которые сделали больше всего заказов (кол-во заказов).
+
+SELECT Users.first_name, Users.last_name
+FROM Users
+JOIN Carts ON Users.user_id = Carts.Users_user_id
+JOIN Orders ON Carts.cart_id = Orders.carts_cart_id
+GROUP BY Users.user_id, Users.first_name, Users.last_name
+ORDER BY COUNT(Orders.order_id) DESC
+LIMIT 5 
+; 
+
+
+7. Вывести топ 5 юзеров, которые создали корзины, но так и не сделали заказы.
+
+SELECT Users.first_name, Users.last_name
+FROM Users
+JOIN Carts ON Users.user_id = Carts.Users_user_id
+JOIN Orders ON Carts.cart_id <> Orders.carts_cart_id
+GROUP BY Users.user_id, Users.first_name, Users.last_name
+ORDER BY COUNT(Orders.order_id) DESC
+LIMIT 5 
+; 
+

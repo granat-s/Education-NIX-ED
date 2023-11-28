@@ -1,0 +1,4 @@
+CREATE TABLE paid_and_delivered_orders AS (
+SELECT * FROM orders
+WHERE order_status_order_status_id = 3 OR order_status_order_status_id = 4
+);

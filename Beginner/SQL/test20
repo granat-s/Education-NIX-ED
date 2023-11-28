@@ -1,0 +1,6 @@
+SELECT Categories.category_title as Category_name, COUNT(Products.product_id) as Number_of_prod
+FROM Products
+JOIN Categories ON Products.category_id = Categories.category_id
+GROUP BY Categories.category_title
+ORDER BY Number_of_prod DESC
+;
