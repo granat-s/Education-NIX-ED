@@ -9,7 +9,7 @@ fi
 [ "$X" -le "0" ] && \
 	echo "X is less than or equal to zero"
 [ "$X" -ge "0" ] && \
-	echo "X is more than or equal to zero"
+echo "X is more than or equal to zero"
 [ "$X" = 0 ] && \
 	echo "X is the string or number"
 [ "$X" = "hello" ] && \
