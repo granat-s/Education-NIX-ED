@@ -1,0 +1,8 @@
+2023-12-05 02:43:41,169 - double_function - INFO - Вызов функции double_function
+2023-12-05 02:43:41,169 - double_function - INFO - Результат: 4
+2023-12-05 02:44:01,712 - double_function - INFO - Вызов функции double_function
+2023-12-05 02:44:01,712 - double_function - INFO - Результат: 4
+2023-12-05 02:44:02,693 - double_function - INFO - Вызов функции double_function
+2023-12-05 02:44:02,693 - double_function - INFO - Результат: 4
+2023-12-05 02:44:03,193 - double_function - INFO - Вызов функции double_function
+2023-12-05 02:44:03,193 - double_function - INFO - Результат: 4
